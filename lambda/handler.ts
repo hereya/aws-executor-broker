@@ -279,7 +279,7 @@ async function patchJobFailed(
           "X-Hereya-Broker-Token": token,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: "failed", error: message }),
+        body: JSON.stringify({ status: "failed", result: { error: message } }),
       }
     );
   } catch (err) {
