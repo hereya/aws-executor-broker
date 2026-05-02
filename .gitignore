@@ -1,6 +1,7 @@
 *.js
 !jest.config.js
 *.d.ts
+!lambda/hereya-cli.d.ts
 node_modules
 
 # CDK asset staging directory
