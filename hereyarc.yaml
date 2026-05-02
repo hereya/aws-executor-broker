@@ -1,0 +1,29 @@
+name: hereya/aws-executor-broker
+version: 0.1.0
+description: "Ephemeral remote executor broker. Deploys: Lambda (verifies hereya-cloud signed JWTs and either resolves env vars directly via SSM/Secrets Manager OR wakes a stopped EC2 to run heavyweight jobs). EC2 launch template + DynamoDB tables (jti replay cache, workspace wake lock) + OIDC identity provider for cross-account role assumption from hereya-cloud."
+visibility: public
+iac: cdk
+infra: aws
+deploy: true
+parameters:
+  workspaceId:
+    description: "Hereya workspace ID this broker serves. Used in the broker invoker IAM role's trust condition (sub == workspace:<id>) and as a tag on EC2 instances."
+    mandatory: true
+  workspaceName:
+    description: "Hereya workspace name (human-readable). Passed to the executor as `hereya executor start -w <name>`."
+    mandatory: true
+  hereyaCloudUrl:
+    description: "Hereya Cloud public origin (e.g. https://cloud.hereya.dev). Used as the OIDC issuer URL and as the API host for the broker Lambda's calls back to hereya-cloud."
+    mandatory: true
+  brokerConcurrency:
+    description: "Reserved Lambda concurrency. Default 50."
+    mandatory: false
+    default: "50"
+  ec2InstanceType:
+    description: "EC2 instance type for heavyweight executor (default t3.medium)."
+    mandatory: false
+    default: "t3.medium"
+  idleTimeoutSeconds:
+    description: "EC2 executor idle-shutdown timeout in seconds. Default 600 (10 min)."
+    mandatory: false
+    default: "600"
