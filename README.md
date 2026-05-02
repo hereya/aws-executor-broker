@@ -1,5 +1,9 @@
 # aws-executor-broker
 
+> **DEPRECATED — use [`hereya/remote-executor-aws`](https://github.com/hereya/remote-executor-aws) `>= 0.6.0` with parameter `mode=ephemeral` instead.** That package merges this broker's functionality into the canonical executor package and replaces the stopped-instance + wake-lock + custom-resource plumbing with an Auto Scaling Group at `min=0/max=1` driven by `SetDesiredCapacity` from the broker Lambda. The `hereya workspace executor install -w <ws> --mode=ephemeral` command (in `hereya-cli >= 0.91.1`) provisions it automatically.
+>
+> Existing installs of this package keep working — uninstall with `hereya workspace executor uninstall -w <ws> --mode=ephemeral` (using the older CLI) and reinstall against `hereya/remote-executor-aws@>=0.6.0` when convenient.
+
 Ephemeral remote-executor broker for a Hereya workspace, deployed into the customer's AWS account.
 
 A broker Lambda receives signed webhooks from hereya-cloud for every executor job and either:

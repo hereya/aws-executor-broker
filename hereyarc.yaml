@@ -1,6 +1,6 @@
 name: hereya/aws-executor-broker
-version: 0.1.1
-description: "Ephemeral remote executor broker. Deploys: Lambda (verifies hereya-cloud signed JWTs and either resolves env vars directly via SSM/Secrets Manager OR wakes a stopped EC2 to run heavyweight jobs). EC2 launch template + DynamoDB tables (jti replay cache, workspace wake lock) + OIDC identity provider for cross-account role assumption from hereya-cloud."
+version: 0.1.2
+description: "[DEPRECATED — use hereya/remote-executor-aws@>=0.6.0 with parameter mode=ephemeral, which merges this functionality into the canonical executor package and drops the stopped-instance / wake-lock plumbing in favour of an ASG with min=0/max=1 controlled by the broker Lambda.] Ephemeral remote executor broker. Deploys: Lambda + stopped EC2 + DynamoDB wake-lock + OIDC identity provider."
 visibility: public
 iac: cdk
 infra: aws
