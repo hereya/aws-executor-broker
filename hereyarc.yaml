@@ -1,5 +1,5 @@
 name: hereya/aws-executor-broker
-version: 0.1.0
+version: 0.1.1
 description: "Ephemeral remote executor broker. Deploys: Lambda (verifies hereya-cloud signed JWTs and either resolves env vars directly via SSM/Secrets Manager OR wakes a stopped EC2 to run heavyweight jobs). EC2 launch template + DynamoDB tables (jti replay cache, workspace wake lock) + OIDC identity provider for cross-account role assumption from hereya-cloud."
 visibility: public
 iac: cdk
