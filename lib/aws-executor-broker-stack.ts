@@ -488,8 +488,9 @@ function buildUserData(opts: {
     "curl -fsSL https://deb.nodesource.com/setup_22.x | bash -",
     "apt-get install -y nodejs",
 
-    // hereya-cli
-    "npm install -g hereya-cli",
+    // hereya-cli is installed on every wake by the systemd unit's
+    // ExecStartPre below, not here — that way each StartInstances picks
+    // up the latest published version instead of freezing at first boot.
 
     // Drop the bootstrap-redeem helper
     "install -d -m 0755 /usr/local/bin",
@@ -529,9 +530,17 @@ function buildUserData(opts: {
     "User=ubuntu",
     "WorkingDirectory=/home/ubuntu",
     "EnvironmentFile=/etc/hereya/executor.env",
+    // Give npm install + redeem room before systemd's default 90s timeout
+    // trips. npm install on a cold network can take a couple minutes.
+    "TimeoutStartSec=300",
+    // Refresh hereya-cli on every wake so StartInstances picks up the
+    // latest published version rather than freezing at first boot.
+    "ExecStartPre=/usr/bin/npm install -g hereya-cli@latest",
     "ExecStartPre=/usr/local/bin/hereya-redeem-bootstrap.sh",
     "ExecStart=/usr/bin/env bash -c 'HEREYA_TOKEN=$(cat /run/hereya/token) HEREYA_CLOUD_URL=${HEREYA_CLOUD_URL} hereya executor start -w ${WORKSPACE_NAME} --idle-timeout=${IDLE_TIMEOUT} --concurrency=20'",
     "ExecStopPost=/sbin/shutdown -h now",
+    // If any ExecStartPre (incl. the npm install) fails, the unit fails
+    // and OnFailure shuts the instance down; the next wake retries.
     "OnFailure=shutdown.target",
     "Restart=no",
     "",
